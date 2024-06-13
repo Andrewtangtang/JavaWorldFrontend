@@ -1,0 +1,17 @@
+.transparentTextArea,
+.transparentTextArea .scroll-pane,
+.transparentTextArea .scroll-pane .viewport,
+.transparentTextArea .scroll-pane .content {
+    -fx-background-color: transparent;
+}
+
+.transparentScrollPane,
+.transparentScrollPane .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 5, 5;
+}
+
+.roundBorder {
+    -fx-background-color: #FFFFFFA0;
+    -fx-background-radius: 10, 10;
+}

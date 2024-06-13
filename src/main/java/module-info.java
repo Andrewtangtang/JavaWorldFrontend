@@ -1,10 +1,10 @@
-module com.javaworld.client {
+open module com.javaworld.clientapp {
     requires com.almasb.fxgl.all;
     requires javafx.web;
+    requires jdk.crypto.cryptoki;
 
     requires com.javaworld;
     requires com.javaworld.adapter;
 
-    opens com.javaworld.clientapp to javafx.fxml;
     exports com.javaworld.clientapp;
 }

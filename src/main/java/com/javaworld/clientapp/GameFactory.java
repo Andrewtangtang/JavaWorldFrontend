@@ -5,9 +5,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -30,9 +28,9 @@ public class GameFactory implements EntityFactory {
         return createTileEntity(data, "grass");
     }
 
-    @Spawns("soil")
+    @Spawns("dirt")
     public Entity newGroundTile(SpawnData data) {
-        return createTileEntity(data, "soil");
+        return createTileEntity(data, "dirt");
     }
 
     @Spawns("plant")
@@ -45,13 +43,17 @@ public class GameFactory implements EntityFactory {
         return createPlayer(data);
     }
 
+    @Spawns("playerNameTag")
+    public Entity newPlayerNameTag(SpawnData data) {
+        return createPlayerNameTag(data);
+    }
 
     private Map<String, Image> imageCache = new HashMap<>();
 
     public GameFactory() {
-        imageCache.put("stone", new Image("com/javaworld/clientapp/rock_pixel.png"));
-        imageCache.put("grass", new Image("com/javaworld/clientapp/grass_pixel.png"));
-        imageCache.put("soil", new Image("com/javaworld/clientapp/soil_pixel.png"));
+        imageCache.put("stone", new Image("rock_pixel.png"));
+        imageCache.put("grass", new Image("grass_pixel.png"));
+        imageCache.put("dirt", new Image("dirt_pixel.png"));
     }
 
     private Entity createTileEntity(SpawnData data, String type) {
@@ -67,35 +69,35 @@ public class GameFactory implements EntityFactory {
     }
 
     private static Entity createPlayer(SpawnData data) {
-        Image image = new Image("com/javaworld/clientapp/role.png");
+        Image image = new Image("role.png");
         Rectangle view = new Rectangle(32, 32);
         view.setFill(new ImagePattern(image));
 
+        Entity e = FXGL.entityBuilder(data)
+                .view(view) // Set the StackPane as the view of the entity
+                .anchorFromCenter()
+                .at(data.getX(), data.getY())
+                .zIndex(4) // Set the z-index if necessary
+                .build();
+        return e;
+    }
 
-        // 从SpawnData中读取玩家名
+    private static Entity createPlayerNameTag(SpawnData data) {
         String playerName = data.get("name").toString();
-        playerName = playerName.substring(0, Math.min(2, playerName.length()));
-        // Create a Text object for the player name using JavaFX
         Text nameTag = new Text(playerName);
         nameTag.setFont(Font.font("Verdana", 14)); // Set the font and size
         nameTag.setFill(Color.WHITE); // Set the text color
 
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(view, nameTag);
-        stackPane.setAlignment(Pos.TOP_CENTER);
-//        StackPane.setAlignment(nameTag, Pos.TOP_CENTER); // Position the text above the center of the view
-
-
-        return FXGL.entityBuilder(data)
-                .view(stackPane) // Set the StackPane as the view of the entity
+        Entity e = FXGL.entityBuilder(data)
+                .view(nameTag) // Set the StackPane as the view of the entity
                 .at(data.getX(), data.getY())
-                .zIndex(3) // Set the z-index if necessary
+                .zIndex(5) // Set the z-index if necessary
                 .build();
-
+        return e;
     }
 
     private static Entity createPlant(SpawnData data) {
-        Image image = new Image("com/javaworld/clientapp/plant.png");
+        Image image = new Image("plant.png");
         Rectangle view = new Rectangle(32, 32);
         view.setFill(new ImagePattern(image));
         return FXGL.entityBuilder(data)

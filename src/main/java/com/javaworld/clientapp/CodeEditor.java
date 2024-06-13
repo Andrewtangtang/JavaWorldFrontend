@@ -4,7 +4,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 
 public class CodeEditor extends StackPane {
-    final WebView webview = new WebView();
+    public final WebView webview = new WebView();
 
     private String editingCode;
 
@@ -70,7 +70,7 @@ public class CodeEditor extends StackPane {
         setCode(editingCode);
     }
 
-    CodeEditor() {
+    public CodeEditor() {
         this.editingCode = """
                 import com.javaworld.adapter.PlayerApplication;
                 import com.javaworld.adapter.Self;
@@ -85,7 +85,7 @@ public class CodeEditor extends StackPane {
 
                     @Override
                     public void gameUpdate(Self self) {
-                        console.println("Update");
+                        console.println(self.getWorld().getWorldTime());
                     }
                 }""";
         webview.getEngine().loadContent(applyEditingTemplate());
