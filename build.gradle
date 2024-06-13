@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.javaworld.clientapp'
-version '1.0'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -34,7 +34,9 @@ javafx {
 }
 
 dependencies {
-    implementation(fileTree('libs'))
+    implementation(files("libs/JavaWorld-1.0.0-SNAPSHOT.jar"))
+    implementation(files("libs/JavaWorldAdapter-1.0.0-SNAPSHOT.jar"))
+    implementation(files("libs/Serializer-1.0-SNAPSHOT.jar"))
 
     implementation('com.github.almasb:fxgl:17.3') {
         exclude(group: 'org.openjfx')

@@ -164,8 +164,8 @@ public class GamePlay implements ClientGameEvent {
     }
 
     private void createScoreboard() {
-        scoreBoard = createScoreboard("Scoreboard", FXGL.getAppWidth() / 2 - 90, 180, 80);
-        scoreBoard.setText("Score: 0");
+        scoreBoard = createScoreboard("Score", FXGL.getAppWidth() / 2 - 90, 180, 80);
+        scoreBoard.setText("0");
     }
 
     private TextArea createScoreboard(String titleName, int x, int width, int height) {
@@ -245,12 +245,14 @@ public class GamePlay implements ClientGameEvent {
         Vec2 entityPos = entity.getPosition();
         if (entity instanceof Player) {
             PlayerDisplay e = players.get(entity.getSerial());
+            if (e == null) return;
             Platform.runLater(() -> {
                 e.player().setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
                 e.nameTag().setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
             });
         } else {
             Entity e = entities.get(entity.getSerial());
+            if (e == null) return;
             Platform.runLater(() -> {
                 e.setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
             });
@@ -318,7 +320,7 @@ public class GamePlay implements ClientGameEvent {
             StringBuilder leaderboardContent = new StringBuilder();
             for (int i = 0; i < playerNames.length; i++) {
                 leaderboardContent.append(String.format("%6s: %d\n", playerNames[i], playerScores[i]));
-                if (playerNames[i].equals(playerName)) scoreBoard.setText("Score: " + playerScores[i]);
+                if (playerNames[i].equals(playerName)) scoreBoard.setText(String.valueOf(playerScores[i]));
             }
             leaderboard.setText(leaderboardContent.toString());
         });

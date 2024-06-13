@@ -72,20 +72,19 @@ public class CodeEditor extends StackPane {
 
     public CodeEditor() {
         this.editingCode = """
-                import com.javaworld.adapter.PlayerApplication;
-                import com.javaworld.adapter.Self;
-                import com.almasb.fxgl.core.math.Vec2;
-
+                import com.javaworld.adapter.*;
+                import com.almasb.fxgl.core.math.*;
+                import java.text.*;
+                import java.util.*;
                 public class Main extends PlayerApplication {
                     @Override
                     public void init(Self self) {
                         console.println("Init");
-                        self.moveTo(new Vec2(0,10));
+                        self.moveTo(new Vec2(0, 10));
                     }
-
                     @Override
                     public void gameUpdate(Self self) {
-                        console.println(self.getWorld().getWorldTime());
+                        console.println(self.getPosition());
                     }
                 }""";
         webview.getEngine().loadContent(applyEditingTemplate());
