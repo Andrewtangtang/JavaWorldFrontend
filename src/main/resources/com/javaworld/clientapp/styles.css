@@ -1,0 +1,9 @@
+.leaderboard {
+    -fx-background-color: transparent;
+}
+
+.leaderboard .scroll-pane,
+.leaderboard .scroll-pane .viewport,
+.leaderboard .scroll-pane .content {
+    -fx-background-color: transparent;
+}
