@@ -1,5 +1,6 @@
 package com.javaworld.clientapp.scene;
 
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -223,10 +224,11 @@ public class GamePlay implements ClientGameEvent {
 
     @Override
     public void entityCreate(com.javaworld.core.entity.Entity entity) {
+        Vec2 entityPos = entity.getPosition();
         if (entity instanceof Player player) {
             String name = player.getName();
             Platform.runLater(() -> {
-                SpawnData spawnData = new SpawnData(toPlayerX(entity.getPosition().x), toPlayerY(entity.getPosition().y)).put("name", name);
+                SpawnData spawnData = new SpawnData(toPlayerX(entityPos.x), toPlayerY(entityPos.y)).put("name", name);
                 players.put(entity.getSerial(), new PlayerDisplay(
                         spawn("player", spawnData),
                         spawn("playerNameTag", spawnData)
@@ -234,30 +236,45 @@ public class GamePlay implements ClientGameEvent {
             });
         } else if (entity.entityData.entityType == EntityType.PLANT) {
             Platform.runLater(() -> entities.put(entity.getSerial(),
-                    spawn("plant", new SpawnData(toPlayerX(entity.getPosition().x), toPlayerY(entity.getPosition().y)))));
+                    spawn("plant", new SpawnData(toPlayerX(entityPos.x), toPlayerY(entityPos.y)))));
         }
     }
 
     @Override
     public void entityUpdate(com.javaworld.core.entity.Entity entity) {
+        Vec2 entityPos = entity.getPosition();
         if (entity instanceof Player) {
+            PlayerDisplay e = players.get(entity.getSerial());
             Platform.runLater(() -> {
-                PlayerDisplay e = players.get(entity.getSerial());
-                e.player().setPosition(toPlayerX(entity.getPosition().x), toPlayerY(entity.getPosition().y));
-                e.nameTag().setPosition(toPlayerX(entity.getPosition().x), toPlayerY(entity.getPosition().y));
+                e.player().setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
+                e.nameTag().setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
             });
         } else {
+            Entity e = entities.get(entity.getSerial());
             Platform.runLater(() -> {
-                Entity e = entities.get(entity.getSerial());
-                e.setPosition(toPlayerX(entity.getPosition().x), toPlayerY(entity.getPosition().y));
+                e.setPosition(toPlayerX(entityPos.x), toPlayerY(entityPos.y));
             });
         }
     }
 
     @Override
     public void entityRemove(com.javaworld.core.entity.Entity entity) {
-        Platform.runLater(() -> FXGL.getGameWorld().removeEntity(entities.get(entity.getSerial())));
-        entities.remove(entity.getSerial());
+        if (entity instanceof Player) {
+            PlayerDisplay e = players.get(entity.getSerial());
+            if (e == null) return;
+            Platform.runLater(() -> {
+                players.remove(entity.getSerial());
+                Platform.runLater(() -> FXGL.getGameWorld().removeEntity(e.player()));
+                Platform.runLater(() -> FXGL.getGameWorld().removeEntity(e.nameTag()));
+            });
+        } else {
+            Entity e = entities.get(entity.getSerial());
+            if (e == null) return;
+            Platform.runLater(() -> {
+                entities.remove(entity.getSerial());
+                Platform.runLater(() -> FXGL.getGameWorld().removeEntity(e));
+            });
+        }
     }
 
     @Override
