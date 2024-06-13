@@ -13,7 +13,7 @@ import com.javaworld.core.Chunk;
 import com.javaworld.core.block.BlockData;
 import com.javaworld.core.block.BlockState;
 import com.javaworld.core.update.ChunkUpdate;
-import com.javaworld.data.ServerResponse;
+import com.javaworld.data.ServerResponseData;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
@@ -104,7 +104,7 @@ public class GamePlay implements ClientGameEvent {
         Pane pane = new Pane(codeWebView, runButton, stopButton);
         runButton.setOnAction(e -> {
             String code = editor.getCodeAndSnapshot();
-            ServerResponse response = gameManager.sendPlayerCode(code);
+            ServerResponseData response = gameManager.sendPlayerCode(code);
             if (!response.success)
                 appendConsoleError(response.message);
             pane.setVisible(false);

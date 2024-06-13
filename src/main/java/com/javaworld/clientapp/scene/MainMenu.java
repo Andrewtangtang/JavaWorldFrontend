@@ -98,18 +98,18 @@ public class MainMenu {
         // Text field for username
         TextField ipField = new TextField();
         ipField.getStyleClass().add("roundBorder");
-        ipField.setPrefWidth(160);
+        ipField.setPrefWidth(360);
         ipField.setPrefHeight(50);
-        ipField.setMaxWidth(160);
-        ipField.setPromptText("localhost");
-        ipField.setText("localhost");
+        ipField.setMaxWidth(360);
+        ipField.setPromptText("ip:port");
+        ipField.setText("wavjaby.nckuctf.org:25567");
         ipField.setFont(buttonFont);
 
         TextField usernameField = new TextField();
         usernameField.getStyleClass().add("roundBorder");
-        usernameField.setPrefWidth(160);
+        usernameField.setPrefWidth(360);
         usernameField.setPrefHeight(50);
-        usernameField.setMaxWidth(160);
+        usernameField.setMaxWidth(360);
         usernameField.setPromptText("Name");
         usernameField.setFont(buttonFont);
 
