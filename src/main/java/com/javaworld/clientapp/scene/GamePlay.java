@@ -15,7 +15,6 @@ import com.javaworld.core.block.BlockState;
 import com.javaworld.core.update.ChunkUpdate;
 import com.javaworld.data.ServerResponseData;
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -50,17 +49,15 @@ public class GamePlay implements ClientGameEvent {
     private TextArea scoreBoard;
     private TextArea leaderboard;
     private VBox console;
-    private ClientGameManager gameManager;
+    private boolean consoleScrollBottom;
 
     public GamePlay() {
         leaderboardFont = pixelFontFact.newFont(25);
-        consoleFont = pixelFontFact.newFont(16);
+        consoleFont = Font.font("Courier New", 16);
         buttonFont = pixelFontFact.newFont(25);
     }
 
     public void initGame(ClientGameManager gameManager) {
-        this.gameManager = gameManager;
-
         createRankLists();
         createScoreboard();
 
@@ -73,9 +70,14 @@ public class GamePlay implements ClientGameEvent {
         consoleScroll.setFitToWidth(true);
         consoleScroll.setVisible(false);
         consoleScroll.getStyleClass().add("transparentScrollPane");
-        consoleScroll.setStyle("-fx-background-color: rgba(33,34,41,0.8);");
-        console.getChildren().addListener((ListChangeListener<Node>) c -> {
-            consoleScroll.setVvalue(1D);
+        consoleScroll.setStyle("-fx-background-color: rgba(33,34,41,0.9);");
+        consoleScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        consoleScroll.setVvalue(consoleScroll.getVmax());
+        consoleScroll.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            if (consoleScrollBottom) {
+                consoleScroll.setVvalue(consoleScroll.getVmax());
+                consoleScrollBottom = false;
+            }
         });
 
 
@@ -130,13 +132,16 @@ public class GamePlay implements ClientGameEvent {
         Text t = new Text(text);
         t.setFont(consoleFont);
         t.setFill(Color.WHITE);
+        consoleScrollBottom = true;
         console.getChildren().add(t);
     }
 
     private void appendConsoleError(String text) {
         Text t = new Text(text);
+        t.setStyle("-fx-font-weight: bold");
         t.setFont(consoleFont);
-        t.setFill(Color.RED);
+        t.setFill(Color.rgb(255, 50, 50));
+        consoleScrollBottom = true;
         console.getChildren().add(t);
     }
 
@@ -144,6 +149,7 @@ public class GamePlay implements ClientGameEvent {
         Button toggleButton = new Button(buttonName);
         toggleButton.setPrefWidth(160); // Set preferred width
         toggleButton.setPrefHeight(50); // Set preferred height
+        toggleButton.setCenterShape(true);
         toggleButton.setFont(buttonFont);
         toggleButton.getStyleClass().add("roundBorder");
         // Default to code editor
