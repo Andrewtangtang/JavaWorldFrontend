@@ -196,19 +196,19 @@ public class GamePlay implements ClientGameEvent {
         return textArea;
     }
 
-    public static double toPlayerX(double x) {
+    private static double toPlayerX(double x) {
         return gameStartX + x * PIXELSENSE - (PIXELSENSE >> 1);
     }
 
-    public static double toPlayerY(double y) {
+    private static double toPlayerY(double y) {
         return gameStartY - y * PIXELSENSE + (PIXELSENSE >> 1);
     }
 
-    public static double toBlockX(int x) {
+    private static double toBlockX(int x) {
         return gameStartX + x * PIXELSENSE;
     }
 
-    public static double toBlockY(int y) {
+    private static double toBlockY(int y) {
         return gameStartY - y * PIXELSENSE;
     }
 
